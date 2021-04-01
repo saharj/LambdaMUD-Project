@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import django_heroku
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 import os
 from decouple import config
 
@@ -63,6 +65,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'adv_project.urls'
@@ -115,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
@@ -128,7 +130,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -148,6 +150,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-import django_heroku
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 django_heroku.settings(locals())
